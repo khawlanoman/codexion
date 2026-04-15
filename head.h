@@ -16,6 +16,9 @@
 
 #include <time.h>
 #include <pthread.h>
+#include <stdio.h>
+
+
 typedef enum {
     fifo,
     edf
@@ -56,5 +59,6 @@ struct coder{
     struct args *config;
 } t;
 
+ char *check_args(struct args arg);
 
 #endif

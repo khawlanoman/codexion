@@ -3,23 +3,23 @@
 
 int main(int argc, char **argv){
     if (argc == 9){
-        int number_of_coders;
-        long time_to_burnout;
-        long time_to_compile;
-        long time_to_debug;
-        long time_to_refactor;
-        int number_of_compiles_required;
-        long dongle_cooldown;
-        char *scheduler;
+       
+        struct args arg;
+        char *err;
+        arg.number_of_coders = atoi(argv[1]);
+        arg.time_to_burnout = atoi(argv[2]);
+        arg.time_to_compile = atoi(argv[3]);
+        arg.time_to_debug = atoi(argv[4]);
+        arg.time_to_refactor = atoi(argv[5]);
+        arg.number_of_compiles_required = atoi(argv[6]);
+        arg.dongle_cooldown = atoi(argv[7]);
+        arg.scheduler = argv[8];
 
-        number_of_coders = atoi(argv[1]);
-        time_to_burnout = atoi(argv[2]);
-        time_to_compile = atoi(argv[3]);
-        time_to_debug = atoi(argv[4]);
-        time_to_refactor = atoi(argv[5]);
-        number_of_compiles_required = atoi(argv[6]);
-        dongle_cooldown = atoi(argv[7]);
-        scheduler = argv[8];
-        
+        err = check_args(arg);
+        if (err)
+        {
+           printf("%s", err);
+           return 1;
+        }
     }
 }
