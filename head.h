@@ -17,7 +17,7 @@
 #include <time.h>
 #include <pthread.h>
 #include <stdio.h>
-
+#include <string.h>
 
 typedef enum {
     fifo,
@@ -31,7 +31,7 @@ typedef enum{
 
 } state_type;
 
-struct args {
+typedef struct args {
     int number_of_coders;
     time_t time_to_burnout;
     time_t time_to_compile;
@@ -40,25 +40,31 @@ struct args {
     int number_of_compiles_required;
     time_t dongle_cooldown;
     scheduler_type scheduler;
-};
+}t_args;
 
-struct dongle{
+typedef struct dongle{
     pthread_mutex_t mutex;
     time_t last_used_time;
 
-};
+} t_dongle;
 
-struct coder{
+ typedef struct coder{
     int id;
     pthread_t thread;
-    struct dongle *left_dongle;
-    struct dongle *right_dongle;
+    t_dongle *left_dongle;
+    t_dongle *right_dongle;
     time_t last_compile_time;
     int compile_count;
     state_type statue;
     struct args *config;
-} t;
+} t_coder;
 
- char *check_args(struct args arg);
+char *check_args(t_args *arg);
+char *valid_args(char **argv, int argc);
+
+
+
+
+
 
 #endif
