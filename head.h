@@ -17,6 +17,7 @@
 #include <time.h>
 #include <pthread.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 typedef enum {
@@ -31,40 +32,52 @@ typedef enum{
 
 } state_type;
 
+typedef struct coder t_coder;
+
 typedef struct args {
     int number_of_coders;
-    time_t time_to_burnout;
-    time_t time_to_compile;
-    time_t time_to_debug;
-    time_t time_to_refactor;
+    long time_to_burnout;
+    long time_to_compile;
+    long time_to_debug;
+    long time_to_refactor;
     int number_of_compiles_required;
-    time_t dongle_cooldown;
+    long dongle_cooldown;
     scheduler_type scheduler;
 }t_args;
 
 typedef struct dongle{
     pthread_mutex_t mutex;
-    time_t last_used_time;
+    long last_used_time;
 
 } t_dongle;
+
+typedef struct s_data
+{
+    t_args args;
+    t_coder *coders;
+    t_dongle *dongles;
+    long start_time;
+    int stop;
+    pthread_mutex_t print_lock;
+
+}t_data;
 
  typedef struct coder{
     int id;
     pthread_t thread;
     t_dongle *left_dongle;
     t_dongle *right_dongle;
-    time_t last_compile_time;
+    long last_compile_time;
     int compile_count;
-    state_type statue;
-    struct args *config;
+    state_type state;
+    t_data *data;
 } t_coder;
+
 
 char *check_args(t_args *arg);
 char *valid_args(char **argv, int argc);
-
-
-
-
-
+void create_coders(t_args *arg);
+t_coder *create_array_coders(t_args *arg);
+t_dongle *create_dongles(t_args *arg);
 
 #endif

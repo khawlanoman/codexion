@@ -51,12 +51,15 @@ int main(int argc, char **argv){
        printf("%s",err);
        return 1;
     }
-    int i = 1;
+   /* int i = 1;
     while (i < argc)
     {
         printf("%s \t",argv[i]);
         i++;
     }
-        
+    */
+    create_coders(&arg);
+    create_dongles(&arg);
+    printf("\n%d",arg.number_of_coders);
     return 0;
 }
