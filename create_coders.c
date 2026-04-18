@@ -11,8 +11,29 @@
 /* ************************************************************************** */
 #include "head.h"
 
-void *thread_f(){
-    printf("threads started ");
+void *thread_f(void *arg){
+    t_coder *coder;
+
+    coder = (t_coder *)arg;
+
+    while(!coder->data->stop){
+        if (coder->id % 2 == 0)
+        {
+            pthread_mutex_lock(&coder->left_dongle->mutex);
+            pthread_mutex_lock(&coder->right_dongle->mutex);
+        }
+        else{
+            pthread_mutex_lock(&coder->right_dongle->mutex);
+            pthread_mutex_lock(&coder->left_dongle->mutex);
+        }
+        coder->state = compile;
+        printf("%d is %d",coder->id,coder->state);
+        sleep(coder->compile_count);
+
+        pthread_mutex_unlock(&coder->left_dongle->mutex);
+        pthread_mutex_unlock(&coder->right_dongle->mutex);
+
+    }
     return NULL;
 }
 
@@ -53,6 +74,7 @@ void create_coders(t_args *arg){
         coder = pthread_create(&threads[i], NULL, thread_f, NULL);
         arr_coder[i].id  = coder;
         arr_coder[i].thread = threads[i];
+        
         i++;
    }
 }
