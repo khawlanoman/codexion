@@ -57,9 +57,15 @@ int main(int argc, char **argv){
         printf("%s \t",argv[i]);
         i++;
     }
-    */
-    create_coders(&arg);
-    create_dongles(&arg);
+    */ 
+    t_coder *coders = create_array_coders(&arg);
+    t_dongle *dongles = create_dongles(&arg);
+    if (!coders || !dongles){
+        return 1;
+    }
+    add_dongles_to_coder(&arg,coders,dongles);
+    create_coders(&arg, coders);
+    
     printf("\n%d",arg.number_of_coders);
     return 0;
 }

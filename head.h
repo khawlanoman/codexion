@@ -77,8 +77,9 @@ typedef struct s_data
 
 char *check_args(t_args *arg);
 char *valid_args(char **argv, int argc);
-void create_coders(t_args *arg);
+void create_coders(t_args *arg, t_coder *arr_coder);
 t_coder *create_array_coders(t_args *arg);
 t_dongle *create_dongles(t_args *arg);
+void add_dongles_to_coder(t_args *arg, t_coder *coder, t_dongle *dongles);
 
 #endif
