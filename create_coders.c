@@ -38,13 +38,13 @@ void *thread_f(void *arg){
 }
 
 
-t_coder *create_array_coders(t_args *arg){
+t_coder *create_array_coders(t_data *data){
     int number_coders;
     t_coder *arr_coders;
     int i;
 
     i = 0;
-    number_coders = arg->number_of_coders;
+    number_coders = data->args.number_of_coders;
     
     arr_coders = malloc((number_coders) * sizeof(t_coder));
     if (!arr_coders){
@@ -55,8 +55,9 @@ t_coder *create_array_coders(t_args *arg){
         arr_coders[i].id = i+1;
         arr_coders[i].state = 0;
         arr_coders[i].left_dongle = NULL;
-        arr_coders[i].right_dongle =NULL;
-        
+        arr_coders[i].right_dongle = NULL;
+        arr_coders[i].compile_count = data->args.time_to_compile;
+        arr_coders[i].data = data;
         i++;
     }
     
@@ -81,17 +82,16 @@ void create_coders(t_args *arg, t_coder *arr_coder){
         pthread_create(&arr_coder[i].thread, NULL, thread_f, &arr_coder[i]);
         i++;
    }
-}
+} 
+void add_dongles_to_coder(t_data *data, t_coder *coder, t_dongle *dongles){
 
-void add_dongles_to_coder(t_args *arg, t_coder *coder, t_dongle *dongles){
-
-    if (arg == NULL || coder== NULL || dongles ==NULL || arg->number_of_coders <= 0){
+    if (data == NULL || coder== NULL || dongles ==NULL || data->args.number_of_coders <= 0){
         return ; 
     }
     int number_coder;
     int i;
 
-    number_coder = arg->number_of_coders;
+    number_coder = data->args.number_of_coders;
     
     i = 0;
 
@@ -100,5 +100,4 @@ void add_dongles_to_coder(t_args *arg, t_coder *coder, t_dongle *dongles){
         coder[i].right_dongle = &dongles[(i +1) % number_coder];
         i++;
     }
-
 }
