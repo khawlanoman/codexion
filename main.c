@@ -60,6 +60,7 @@ int main(int argc, char **argv){
     data.start_time = 0;
     data.stop = 0;
     pthread_mutex_init(&data.print_lock, NULL);
+    data.stop = 0;
    /* int i = 1;
     while (i < argc)
     {
