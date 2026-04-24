@@ -13,10 +13,10 @@
 
 void *thread_f(void *arg){
     t_coder *coder;
-
+    
     coder = (t_coder *)arg;
-
-    while(!coder->data->stop){
+    int i = 0;
+    while(i < 3){
         if (coder->id % 2 == 0)
         {
             pthread_mutex_lock(&coder->left_dongle->mutex);
@@ -27,12 +27,12 @@ void *thread_f(void *arg){
             pthread_mutex_lock(&coder->left_dongle->mutex);
         }
         coder->state = compile;
-        printf("%d is compile\n",coder->id);
-        sleep(coder->compile_count);
+        printf(" %d is compiling\n" ,coder->id);
+        sleep(coder->data->args.time_to_compile);
 
         pthread_mutex_unlock(&coder->left_dongle->mutex);
         pthread_mutex_unlock(&coder->right_dongle->mutex);
-
+        i++;
     }
     return NULL;
 }

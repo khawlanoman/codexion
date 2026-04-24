@@ -76,7 +76,7 @@ int main(int argc, char **argv){
 
     init_dongles(data.dongles,&data);
     add_dongles_to_coder(&data,data.coders,data.dongles);
-    //create_coders(&data.args, data.coders);
+    create_coders(&data.args, data.coders);
     
     //printf("\n%d\n",arg.number_of_coders);
     int i = 0 ;
