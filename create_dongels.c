@@ -20,8 +20,6 @@ t_dongle *create_dongles(t_data *data){
     int number_dongles;
     t_dongle *arr_dongles;
 
-    int i;
-    i = 0;
     number_dongles = data->args.number_of_coders;
     arr_dongles = malloc((number_dongles) * sizeof(t_dongle));
     if (!arr_dongles)

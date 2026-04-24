@@ -27,7 +27,7 @@ void *thread_f(void *arg){
             pthread_mutex_lock(&coder->left_dongle->mutex);
         }
         coder->state = compile;
-        printf("%d is %d",coder->id,coder->state);
+        printf("%d is compile\n",coder->id);
         sleep(coder->compile_count);
 
         pthread_mutex_unlock(&coder->left_dongle->mutex);
@@ -82,7 +82,10 @@ void create_coders(t_args *arg, t_coder *arr_coder){
         pthread_create(&arr_coder[i].thread, NULL, thread_f, &arr_coder[i]);
         i++;
    }
-} 
+}
+
+
+
 void add_dongles_to_coder(t_data *data, t_coder *coder, t_dongle *dongles){
 
     if (data == NULL || coder== NULL || dongles ==NULL || data->args.number_of_coders <= 0){

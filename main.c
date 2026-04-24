@@ -75,10 +75,14 @@ int main(int argc, char **argv){
 
     init_dongles(data.dongles,&data);
     add_dongles_to_coder(&data,data.coders,data.dongles);
-    create_coders(&data.args, data.coders);
+    //create_coders(&data.args, data.coders);
     
-    printf("\n%d\n",arg.number_of_coders);
-
+    //printf("\n%d\n",arg.number_of_coders);
+    int i = 0 ;
+    while (i< arg.number_of_coders){
+        printf("%d left: %p right: %p\n",data.coders[i].id, (void *)data.coders[i].left_dongle, (void *)data.coders[i].right_dongle);
+        i++;
+    }
     data.stop = 1;  
 
    // pthread_join(data.coders.thread, NULL);
