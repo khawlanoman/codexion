@@ -53,6 +53,7 @@ int main(int argc, char **argv){
        return 1;
     }
 
+    data.start_time = gettimeofday(&time_s,NULL);
 
     data.args = arg;
     data.coders = NULL;

@@ -21,6 +21,12 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <sys/time.h>
+
+struct  timeval time_s;
+struct timeval now;
+
+
 typedef enum {
     fifo,
     edf
