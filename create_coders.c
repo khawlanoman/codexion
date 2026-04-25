@@ -39,24 +39,26 @@ void *thread_f(void *arg){
         else{*/
             time_now = time_current();
             timestamp = time_now - coder->data->start_time;
-            pthread_mutex_lock(&coder->left_dongle->mutex);
-            printf("%lld %d has taken a dongle\n", timestamp,coder->id);
+            if (pthread_mutex_lock(&coder->left_dongle->mutex) == 0)
+                printf("%lld %d has taken a dongle\n", timestamp,coder->id);
           
 
             time_now = time_current();
             timestamp = time_now - coder->data->start_time;
-            pthread_mutex_lock(&coder->right_dongle->mutex);
-            printf("%lld %d has taken a dongle\n", timestamp,coder->id);
+            if (pthread_mutex_lock(&coder->right_dongle->mutex) == 0)
+                printf("%lld %d has taken a dongle\n", timestamp,coder->id);
             
         
         coder->state = compile;
         time_now = time_current();
         timestamp = time_now - coder->data->start_time;
-        printf("%lld %d is compiling\n" , timestamp,coder->id);
-        usleep(coder->data->args.time_to_compile);
+        
 
         pthread_mutex_unlock(&coder->left_dongle->mutex);
         pthread_mutex_unlock(&coder->right_dongle->mutex);
+
+        printf("%lld %d is compiling\n" , timestamp,coder->id);
+        usleep(coder->data->args.time_to_compile);
         i++;
     }
     return NULL;
