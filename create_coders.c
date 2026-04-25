@@ -13,32 +13,33 @@
 
 void *thread_f(void *arg){
     t_coder *coder;
-    t_data *data;
+
     coder = (t_coder *)arg;
-    long time_now = gettimeofday(&now,NULL);
-    long timestamp ;
+   
+    long long timestamp ;
     int i = 0;
     while(i < 3){
-        timestamp = time_now - data->start_time;
+        long long  time_now = time_current();
+        timestamp = time_now - coder->data->start_time;
         if (coder->id % 2 == 0)
         {
 
             pthread_mutex_lock(&coder->right_dongle->mutex);
-            printf(" %ld %d has taken a dongle\n", timestamp,coder->id);
+            printf(" %lld %d has taken a dongle\n", timestamp,coder->id);
             pthread_mutex_unlock(&coder->right_dongle->mutex);
     
             pthread_mutex_lock(&coder->left_dongle->mutex);
-            printf(" %ld %d has taken a dongle\n", timestamp,coder->id);
+            printf(" %lld %d has taken a dongle\n", timestamp,coder->id);
             pthread_mutex_unlock(&coder->left_dongle->mutex);
         }
         else{
             
             pthread_mutex_lock(&coder->left_dongle->mutex);
-            printf(" %ld %d has taken a dongle\n", timestamp,coder->id);
+            printf(" %lld %d has taken a dongle\n", timestamp,coder->id);
             pthread_mutex_unlock(&coder->left_dongle->mutex);
         
             pthread_mutex_lock(&coder->right_dongle->mutex);
-            printf(" %ld %d has taken a dongle\n", timestamp,coder->id);
+            printf(" %lld %d has taken a dongle\n", timestamp,coder->id);
             pthread_mutex_unlock(&coder->right_dongle->mutex);
         }
         coder->state = compile;

@@ -12,8 +12,8 @@
 
 #include "head.h"
 
-long time_current(){
-    long now;
+long long time_current(void){
+    long long now;
     struct timeval now_t;
     gettimeofday(&now_t, NULL);
     now = (now_t.tv_sec * 1000) + (now_t.tv_usec / 1000);

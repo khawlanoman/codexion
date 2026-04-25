@@ -26,6 +26,7 @@ int main(int argc, char **argv){
     t_data data;
     char *err;
     char *valid;
+   
     valid = valid_args(argv,argc);
     if (valid ){
         printf("%s",valid);
@@ -53,12 +54,12 @@ int main(int argc, char **argv){
        return 1;
     }
 
-    data.start_time = gettimeofday(&time_s,NULL);
+   
 
     data.args = arg;
     data.coders = NULL;
     data.dongles = NULL;
-    data.start_time = 0;
+    data.start_time = time_current();
     data.stop = 0;
     pthread_mutex_init(&data.print_lock, NULL);
     data.stop = 0;

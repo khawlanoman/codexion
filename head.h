@@ -23,8 +23,7 @@
 
 #include <sys/time.h>
 
-struct  timeval time_s;
-struct timeval now;
+
 
 
 typedef enum {
@@ -91,4 +90,5 @@ t_dongle *create_dongles(t_data *data);
 void add_dongles_to_coder(t_data *data, t_coder *coder, t_dongle *dongles);
 void init_dongles(t_dongle *dongles, t_data *data);
 
+long long time_current(void);
 #endif
