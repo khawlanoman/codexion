@@ -1,6 +1,6 @@
 #include <pthread.h>
 #include <stdio.h>
-
+#include <sys/time.h>
 
 void *print_it(){
     printf("HELLO");
@@ -9,8 +9,8 @@ void *print_it(){
 
 
 int main(){
-        pthread_t t1;
-
-        pthread_create(&t1,NULL, print_it,NULL);    
-        pthread_join(t1, NULL);
+     struct timeval tv;
+     gettimeofday(&tv,NULL);
+     printf("%ld, %ld",tv.tv_sec,tv.tv_usec);
+     
 }
