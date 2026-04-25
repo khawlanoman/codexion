@@ -81,13 +81,13 @@ int main(int argc, char **argv){
     create_coders(&data.args, data.coders);
     
     //printf("\n%d\n",arg.number_of_coders);
-    int i = 0 ;
+    /*int i = 0 ;
     while (i< arg.number_of_coders){
         printf("%d left: %p right: %p\n",data.coders[i].id, (void *)data.coders[i].left_dongle, (void *)data.coders[i].right_dongle);
         i++;
-    }
+    }*/
     data.stop = 1;  
 
-   // pthread_join(data.coders.thread, NULL);
+   pthread_join(data.coders->thread, NULL);
     return 0;
 }
