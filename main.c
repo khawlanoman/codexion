@@ -61,6 +61,7 @@ int main(int argc, char **argv){
     data.dongles = NULL;
     data.start_time = time_current();
     data.stop = 0;
+    
     pthread_mutex_init(&data.print_lock, NULL);
     data.stop = 0;
    /* int i = 1;
@@ -71,6 +72,7 @@ int main(int argc, char **argv){
     }
     */ 
     data.coders = create_array_coders(&data);
+    data.coders->last_compile_time = data.start_time;
     data.dongles = create_dongles(&data);
     if (!data.coders || !data.dongles){
         return 1;
@@ -86,8 +88,17 @@ int main(int argc, char **argv){
         printf("%d left: %p right: %p\n",data.coders[i].id, (void *)data.coders[i].left_dongle, (void *)data.coders[i].right_dongle);
         i++;
     }*/
-    data.stop = 1;  
+    pthread_t m_check;
+    
+    pthread_create(&m_check,NULL,monitor_check, &data);
+    int i = 0;
+    while (i < arg.number_of_coders)
+    {
+           pthread_join(data.coders[i].thread, NULL);
+           i++;
 
-   pthread_join(data.coders->thread, NULL);
+    }
+
+    pthread_join(m_check,NULL);
     return 0;
 }

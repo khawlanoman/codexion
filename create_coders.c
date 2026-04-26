@@ -18,48 +18,89 @@ void *thread_f(void *arg){
    
     long long timestamp ;
     long long time_now;
-    int i = 0;
     while(!coder->data->stop){
         
-        /*if (coder->id % 2 == 0)
+        if (coder->data->stop == 1)
+                return NULL;
+       
+        if (coder->id % 2 == 0)
         {
+            pthread_mutex_lock(&coder->right_dongle->mutex); 
             time_now = time_current();
             timestamp = time_now - coder->data->start_time;
-            pthread_mutex_lock(&coder->right_dongle->mutex);
-            printf("%lld %d has taken a dongle\n", timestamp,coder->id);
-            pthread_mutex_unlock(&coder->right_dongle->mutex);
-
-
-            time_now = time_current();
-            timestamp = time_now - coder->data->start_time;
+            pthread_mutex_lock(&coder->data->print_lock);
+            printf("%lld %d has taken a dongle\n", timestamp, coder->id);
+            pthread_mutex_unlock(&coder->data->print_lock);
+      
             pthread_mutex_lock(&coder->left_dongle->mutex);
-            printf("%lld %d has taken a dongle\n", timestamp,coder->id);
-            pthread_mutex_unlock(&coder->left_dongle->mutex);
+            time_now = time_current();
+            timestamp = time_now - coder->data->start_time;
+            pthread_mutex_lock(&coder->data->print_lock);
+            printf("%lld %d has taken a dongle\n", timestamp, coder->id);
+            pthread_mutex_unlock(&coder->data->print_lock);
         }
-        else{*/
-            time_now = time_current();
-            timestamp = time_now - coder->data->start_time;
-            if (pthread_mutex_lock(&coder->left_dongle->mutex) == 0)
-                printf("%lld %d has taken a dongle\n", timestamp,coder->id);
-          
 
+        else {
+            pthread_mutex_lock(&coder->left_dongle->mutex);
             time_now = time_current();
             timestamp = time_now - coder->data->start_time;
-            if (pthread_mutex_lock(&coder->right_dongle->mutex) == 0)
-                printf("%lld %d has taken a dongle\n", timestamp,coder->id);
-            
+            pthread_mutex_lock(&coder->data->print_lock);
+            printf("%lld %d has taken a dongle\n", timestamp, coder->id);
+            pthread_mutex_unlock(&coder->data->print_lock);
+        
+            pthread_mutex_lock(&coder->right_dongle->mutex); 
+            time_now = time_current();
+            timestamp = time_now - coder->data->start_time;
+            pthread_mutex_lock(&coder->data->print_lock);
+            printf("%lld %d has taken a dongle\n", timestamp, coder->id);
+            pthread_mutex_unlock(&coder->data->print_lock);
+        }   
+    
+       
+        if (coder->data->stop ==1){
+             pthread_mutex_unlock(&coder->left_dongle->mutex);
+             pthread_mutex_unlock(&coder->right_dongle->mutex);
+             return NULL;
+        }
+
         
         coder->state = compile;
+        coder->last_compile_time =  time_now;
         time_now = time_current();
         timestamp = time_now - coder->data->start_time;
         
+        pthread_mutex_lock(&coder->data->print_lock);
+        printf("%lld %d is compiling\n" , timestamp,coder->id);
+        pthread_mutex_unlock(&coder->data->print_lock);
+        usleep(coder->data->args.time_to_compile *1000);
 
         pthread_mutex_unlock(&coder->left_dongle->mutex);
         pthread_mutex_unlock(&coder->right_dongle->mutex);
 
-        printf("%lld %d is compiling\n" , timestamp,coder->id);
-        usleep(coder->data->args.time_to_compile);
-        i++;
+        if (coder->data->stop == 1)
+                return NULL;
+        time_now = time_current();
+        timestamp = time_now - coder->data->start_time;
+        coder->state = debug;
+        pthread_mutex_lock(&coder->data->print_lock);
+        printf("%lld %d is debuging\n" , timestamp,coder->id);
+        pthread_mutex_unlock(&coder->data->print_lock);
+        usleep(coder->data->args.time_to_debug * 1000);
+
+        if (coder->data->stop == 1)
+                return NULL;
+        time_now = time_current();
+        timestamp = time_now - coder->data->start_time;
+        coder->state = refactor;
+        pthread_mutex_lock(&coder->data->print_lock);
+        printf("%lld %d is refactoring\n" , timestamp,coder->id);
+        pthread_mutex_unlock(&coder->data->print_lock);
+        usleep(coder->data->args.time_to_refactor * 1000);
+
+        
+       
+    coder->compile_count++;
+ 
     }
     return NULL;
 }
@@ -110,7 +151,6 @@ void create_coders(t_args *arg, t_coder *arr_coder){
         i++;
    }
 }
-
 
 
 void add_dongles_to_coder(t_data *data, t_coder *coder, t_dongle *dongles){

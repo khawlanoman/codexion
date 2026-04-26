@@ -91,4 +91,6 @@ void add_dongles_to_coder(t_data *data, t_coder *coder, t_dongle *dongles);
 void init_dongles(t_dongle *dongles, t_data *data);
 
 long long time_current(void);
+
+void *monitor_check(void *data);
 #endif
